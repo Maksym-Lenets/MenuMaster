@@ -40,6 +40,6 @@ This documentation provides details about the available endpoints, request param
 The application uses H2 Database for local development. You can access the H2 console
 at: http://localhost:8080/h2-console
 
-* JDBC URL: jdbc:h2:mem:testdb
+* JDBC URL: jdbc:h2:mem:menumaster
 * Username: sa
 * Password: password
