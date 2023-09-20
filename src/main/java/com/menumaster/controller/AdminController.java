@@ -37,7 +37,8 @@ public class AdminController {
         description = "returns saved Cuisine Origin")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Cuisine Origin added or updated successfully"),
-        @ApiResponse(responseCode = "404", description = "Invalid CuisineOrigin id")
+        @ApiResponse(responseCode = "404", description = "Invalid CuisineOrigin id"),
+        @ApiResponse(responseCode = "400", description = "Exception during new Cuisine Origin validating")
     })
     @PostMapping("/addCuisineOrigin")
     public ResponseEntity<CuisineOrigin> addOrUpdateCuisineOrigin(@RequestBody @Valid CuisineOrigin cuisineOrigin) {
@@ -57,10 +58,12 @@ public class AdminController {
         description = "returns saved Main Course")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Main Course added or updated successfully"),
-        @ApiResponse(responseCode = "404", description = "Invalid MainCourse id")
+        @ApiResponse(responseCode = "404", description = "Invalid MainCourse id"),
+        @ApiResponse(responseCode = "406",
+            description = "At least one of the required fields of the new item is not filled in")
     })
     @PostMapping("/addMainCourse")
-    public ResponseEntity<MainCourseDto> addOrUpdateMainCourse(@RequestBody @Valid MainCourseDto mainCourseDto) {
+    public ResponseEntity<MainCourseDto> addOrUpdateMainCourse(@RequestBody MainCourseDto mainCourseDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(adminService.addOrUpdateMainCourse(mainCourseDto));
     }
@@ -76,10 +79,12 @@ public class AdminController {
         description = "returns saved Dessert")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Dessert added or updated successfully"),
-        @ApiResponse(responseCode = "404", description = "Invalid Dessert id")
+        @ApiResponse(responseCode = "404", description = "Invalid Dessert id"),
+        @ApiResponse(responseCode = "406",
+            description = "At least one of the required fields of the new item is not filled in")
     })
     @PostMapping("/addDessert")
-    public ResponseEntity<DessertDto> addOrUpdateDessert(@RequestBody @Valid DessertDto dessertDto) {
+    public ResponseEntity<DessertDto> addOrUpdateDessert(@RequestBody DessertDto dessertDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(adminService.addOrUpdateDessert(dessertDto));
     }
@@ -95,10 +100,12 @@ public class AdminController {
         description = "returns saved Drink")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Drink added or updated successfully"),
-        @ApiResponse(responseCode = "404", description = "Invalid Drink id")
+        @ApiResponse(responseCode = "404", description = "Invalid Drink id"),
+        @ApiResponse(responseCode = "406",
+            description = "At least one of the required fields of the new item is not filled in")
     })
     @PostMapping("/addDrink")
-    public ResponseEntity<DrinkDto> addOrUpdateDrink(@RequestBody @Valid DrinkDto drinkDto) {
+    public ResponseEntity<DrinkDto> addOrUpdateDrink(@RequestBody DrinkDto drinkDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(adminService.addOrUpdateDrink(drinkDto));
     }

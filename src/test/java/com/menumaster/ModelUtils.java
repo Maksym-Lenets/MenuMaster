@@ -85,7 +85,7 @@ public class ModelUtils {
         return DessertDto.builder()
             .name("NewDessert")
             .price(50)
-            .cuisineDescription("newCuisine")
+            .cuisineOrigin("newCuisine")
             .build();
     }
 
@@ -94,7 +94,7 @@ public class ModelUtils {
             .id(1L)
             .name("NewDessert")
             .price(50)
-            .cuisineDescription("newCuisine")
+            .cuisineOrigin("newCuisine")
             .build();
     }
 
@@ -195,11 +195,11 @@ public class ModelUtils {
 
     public static List<DessertDto> getDessertDtos() {
         return Arrays.asList(
-            DessertDto.builder().id(1L).name("FirstDessert").cuisineDescription("FirstCuisineOrigin").price(100)
+            DessertDto.builder().id(1L).name("FirstDessert").cuisineOrigin("FirstCuisineOrigin").price(100)
                 .build(),
-            DessertDto.builder().id(2L).name("SecondDessert").cuisineDescription("SecondCuisineOrigin").price(200)
+            DessertDto.builder().id(2L).name("SecondDessert").cuisineOrigin("SecondCuisineOrigin").price(200)
                 .build(),
-            DessertDto.builder().id(3L).name("ThirdDessert").cuisineDescription("ThirdCuisineOrigin").price(300)
+            DessertDto.builder().id(3L).name("ThirdDessert").cuisineOrigin("ThirdCuisineOrigin").price(300)
                 .build());
     }
 

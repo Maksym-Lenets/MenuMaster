@@ -13,7 +13,7 @@ public class DessertToDto extends AbstractConverter<Dessert, DessertDto> {
             .id(dessert.getId())
             .name(dessert.getName())
             .price(dessert.getPrice())
-            .cuisineDescription(dessert.getCuisine().getDescription())
+            .cuisineOrigin(dessert.getCuisine().getDescription())
             .build();
     }
 }

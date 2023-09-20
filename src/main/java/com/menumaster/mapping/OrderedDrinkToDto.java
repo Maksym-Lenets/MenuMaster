@@ -12,7 +12,7 @@ public class OrderedDrinkToDto extends AbstractConverter<OrderedDrink, OrderedDr
         return OrderedDrinkDto.builder()
             .drinkId(orderedDrink.getDrink().getId())
             .iceCubes(orderedDrink.isIceCubes())
-            .iceCubes(orderedDrink.isLemons())
+            .lemons(orderedDrink.isLemons())
             .build();
     }
 }

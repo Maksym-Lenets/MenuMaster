@@ -81,6 +81,24 @@ class AdminControllerTest {
     }
 
     @Test
+    void addOrUpdateCuisineOriginIllegalArgumentExceptionTest() throws Exception {
+        CuisineOrigin cuisineOrigin = ModelUtils.getNewCuisineOrigin();
+        String jsonRequest = objectMapper.writeValueAsString(cuisineOrigin);
+        String exceptionMessage = "Some exception";
+
+        doThrow(new IllegalArgumentException(exceptionMessage))
+            .when(adminService)
+            .addOrUpdateCuisineOrigin(cuisineOrigin);
+        Assertions.assertThatThrownBy(() -> mockMvc.perform(post("/admin/addCuisineOrigin")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonRequest))
+            .andExpect(status().isNotAcceptable()))
+            .hasCause(new IllegalArgumentException(exceptionMessage));
+
+        verify(adminService).addOrUpdateCuisineOrigin(cuisineOrigin);
+    }
+
+    @Test
     void addOrUpdateMainCourseTest() throws Exception {
         MainCourseDto mainCourseDto = ModelUtils.getNewMainCourseDto();
         String jsonRequest = objectMapper.writeValueAsString(mainCourseDto);
@@ -113,6 +131,24 @@ class AdminControllerTest {
             .content(jsonRequest))
             .andExpect(status().isNotFound()))
             .hasCause(new ItemNotFoundException(exceptionMessage));
+
+        verify(adminService).addOrUpdateMainCourse(mainCourseDto);
+    }
+
+    @Test
+    void addOrUpdateMainCourseIllegalArgumentExceptionTest() throws Exception {
+        MainCourseDto mainCourseDto = ModelUtils.getUpdatedMainCourseDto();
+        String jsonRequest = objectMapper.writeValueAsString(mainCourseDto);
+        String exceptionMessage = "Some exception";
+
+        doThrow(new IllegalArgumentException(exceptionMessage))
+            .when(adminService)
+            .addOrUpdateMainCourse(mainCourseDto);
+        Assertions.assertThatThrownBy(() -> mockMvc.perform(post("/admin/addMainCourse")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonRequest))
+            .andExpect(status().isNotAcceptable()))
+            .hasCause(new IllegalArgumentException(exceptionMessage));
 
         verify(adminService).addOrUpdateMainCourse(mainCourseDto);
     }
@@ -156,6 +192,25 @@ class AdminControllerTest {
     }
 
     @Test
+    void addOrUpdateDessertIllegalArgumentExceptionTest() throws Exception {
+        DessertDto newDessertDto = ModelUtils.getNewDessertDto();
+        String jsonRequest = objectMapper.writeValueAsString(newDessertDto);
+        String exceptionMessage = "Some exception";
+
+        doThrow(new IllegalArgumentException(exceptionMessage))
+            .when(adminService)
+            .addOrUpdateDessert(newDessertDto);
+
+        Assertions.assertThatThrownBy(() -> mockMvc.perform(post("/admin/addDessert")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonRequest))
+            .andExpect(status().isNotAcceptable()))
+            .hasCause(new IllegalArgumentException(exceptionMessage));
+
+        verify(adminService).addOrUpdateDessert(newDessertDto);
+    }
+
+    @Test
     void addOrUpdateDrinkTest() throws Exception {
         DrinkDto drinkDto = ModelUtils.getNewDrinkDto();
         String jsonRequest = objectMapper.writeValueAsString(drinkDto);
@@ -189,6 +244,26 @@ class AdminControllerTest {
             .content(jsonRequest))
             .andExpect(status().isNotFound()))
             .hasCause(new ItemNotFoundException(exceptionMessage));
+
+        verify(adminService).addOrUpdateDrink(drinkDto);
+
+    }
+
+    @Test
+    void addOrUpdateDrinkIllegalArgumentExceptionTest() throws Exception {
+        DrinkDto drinkDto = ModelUtils.getNewDrinkDto();
+        String jsonRequest = objectMapper.writeValueAsString(drinkDto);
+        String exceptionMessage = "Some exception";
+
+        doThrow(new IllegalArgumentException(exceptionMessage))
+            .when(adminService)
+            .addOrUpdateDrink(drinkDto);
+
+        Assertions.assertThatThrownBy(() -> mockMvc.perform(post("/admin/addDrink")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonRequest))
+            .andExpect(status().isNotAcceptable()))
+            .hasCause(new IllegalArgumentException(exceptionMessage));
 
         verify(adminService).addOrUpdateDrink(drinkDto);
 

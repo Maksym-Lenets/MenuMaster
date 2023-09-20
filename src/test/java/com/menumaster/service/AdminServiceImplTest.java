@@ -62,11 +62,10 @@ class AdminServiceImplTest {
         CuisineOrigin savedCuisineOrigin = ModelUtils.getSavedNewCuisineOrigin();
         when(cuisineOriginRepository.findById(updatedNewCuisineOrigin.getId()))
             .thenReturn(Optional.ofNullable(savedCuisineOrigin));
-
+        when(cuisineOriginRepository.save(any())).thenReturn(savedCuisineOrigin);
         CuisineOrigin result = adminService.addOrUpdateCuisineOrigin(updatedNewCuisineOrigin);
 
-        verify(cuisineOriginRepository).findById(any());
-        verify(cuisineOriginRepository, never()).save(any());
+        verify(cuisineOriginRepository).findById(updatedNewCuisineOrigin.getId());
         assertEquals(result, updatedNewCuisineOrigin);
     }
 
@@ -82,6 +81,20 @@ class AdminServiceImplTest {
         verify(cuisineOriginRepository, never()).save(any());
         assertEquals(ErrorMessage.CUISINE_ORIGIN_NOT_FOUND + newCuisineOrigin.getId(),
             itemNotFoundException.getMessage());
+    }
+
+    @Test
+    void addOrUpdateCuisineOriginAddNotValidCuisineOriginTest() {
+        CuisineOrigin newCuisineOrigin = new CuisineOrigin();
+
+        IllegalArgumentException itemNotValidException =
+            assertThrows(IllegalArgumentException.class,
+                () -> adminService.addOrUpdateCuisineOrigin(newCuisineOrigin));
+
+        verify(cuisineOriginRepository, never()).save(any());
+        verify(cuisineOriginRepository, never()).findById(any());
+        assertEquals(ErrorMessage.ALL_FIELDS_MUST_BE_FILLED_FOR_NEW_ENTITY + newCuisineOrigin,
+            itemNotValidException.getMessage());
     }
 
     @Test
@@ -113,12 +126,11 @@ class AdminServiceImplTest {
         when(modelMapper.map(updatedMainCourse, MainCourseDto.class)).thenReturn(updatedMainCourseDto);
         when(cuisineOriginRepository.findByDescription(updatedMainCourseDto.getCuisineOrigin()))
             .thenReturn(Optional.of(ModelUtils.getUpdatedCuisineOrigin()));
-        when(mainCourseRepository.save(any())).thenReturn(updatedMainCourse);
 
         MainCourseDto result = adminService.addOrUpdateMainCourse(updatedMainCourseDto);
 
         verify(mainCourseRepository).findById(updatedMainCourseDto.getId());
-        verify(mainCourseRepository).save(updatedMainCourse);
+        verify(mainCourseRepository, never()).save(updatedMainCourse);
         verify(cuisineOriginRepository).findByDescription(updatedMainCourseDto.getCuisineOrigin());
         assertEquals(updatedMainCourseDto, result);
     }
@@ -141,13 +153,29 @@ class AdminServiceImplTest {
     }
 
     @Test
+    void addOrUpdateMainCourseAddNotValidMainCourseTest() {
+        MainCourseDto newMainCourseDto = ModelUtils.getNewMainCourseDto();
+        newMainCourseDto.setName(null);
+
+        IllegalArgumentException itemNotValidException =
+            assertThrows(IllegalArgumentException.class,
+                () -> adminService.addOrUpdateMainCourse(newMainCourseDto));
+
+        verify(mainCourseRepository, never()).findById(any());
+        verify(mainCourseRepository, never()).save(any());
+        verify(cuisineOriginRepository, never()).findByDescription(newMainCourseDto.getCuisineOrigin());
+        assertEquals(ErrorMessage.ALL_FIELDS_MUST_BE_FILLED_FOR_NEW_ENTITY + newMainCourseDto,
+            itemNotValidException.getMessage());
+    }
+
+    @Test
     void addOrUpdateDessertNewDessertTest() {
         DessertDto newDessertDto = ModelUtils.getNewDessertDto();
         DessertDto savedDessertDto = ModelUtils.getUpdatedDessertDto();
         Dessert updatedDessert = ModelUtils.getUpdatedDessert();
 
         when(modelMapper.map(updatedDessert, DessertDto.class)).thenReturn(savedDessertDto);
-        when(cuisineOriginRepository.findByDescription(newDessertDto.getCuisineDescription()))
+        when(cuisineOriginRepository.findByDescription(newDessertDto.getCuisineOrigin()))
             .thenReturn(Optional.of(ModelUtils.getUpdatedCuisineOrigin()));
         when(dessertRepository.save(any())).thenReturn(updatedDessert);
 
@@ -155,7 +183,7 @@ class AdminServiceImplTest {
 
         verify(dessertRepository, never()).findById(any());
         verify(dessertRepository).save(any());
-        verify(cuisineOriginRepository).findByDescription(newDessertDto.getCuisineDescription());
+        verify(cuisineOriginRepository).findByDescription(newDessertDto.getCuisineOrigin());
         assertEquals(savedDessertDto, result);
     }
 
@@ -167,15 +195,14 @@ class AdminServiceImplTest {
 
         when(dessertRepository.findById(updatedDessertDto.getId())).thenReturn(Optional.of(savedDessert));
         when(modelMapper.map(updatedDessert, DessertDto.class)).thenReturn(updatedDessertDto);
-        when(cuisineOriginRepository.findByDescription(updatedDessertDto.getCuisineDescription()))
+        when(cuisineOriginRepository.findByDescription(updatedDessertDto.getCuisineOrigin()))
             .thenReturn(Optional.of(ModelUtils.getUpdatedCuisineOrigin()));
-        when(dessertRepository.save(any())).thenReturn(updatedDessert);
 
         DessertDto result = adminService.addOrUpdateDessert(updatedDessertDto);
 
         verify(dessertRepository).findById(updatedDessertDto.getId());
-        verify(dessertRepository).save(updatedDessert);
-        verify(cuisineOriginRepository).findByDescription(updatedDessertDto.getCuisineDescription());
+        verify(dessertRepository, never()).save(updatedDessert);
+        verify(cuisineOriginRepository).findByDescription(updatedDessertDto.getCuisineOrigin());
         assertEquals(updatedDessertDto, result);
     }
 
@@ -191,8 +218,24 @@ class AdminServiceImplTest {
 
         verify(dessertRepository).findById(updatedDessertDto.getId());
         verify(dessertRepository, never()).save(any());
-        verify(cuisineOriginRepository, never()).findByDescription(updatedDessertDto.getCuisineDescription());
+        verify(cuisineOriginRepository, never()).findByDescription(updatedDessertDto.getCuisineOrigin());
         assertEquals(ErrorMessage.DESSERT_NOT_FOUND + updatedDessertDto.getId(), itemNotFoundException.getMessage());
+    }
+
+    @Test
+    void addOrUpdateDessertAddNotValidDessertTest() {
+        DessertDto newDessertDto = ModelUtils.getNewDessertDto();
+        newDessertDto.setName(null);
+
+        IllegalArgumentException itemNotValidException =
+            assertThrows(IllegalArgumentException.class,
+                () -> adminService.addOrUpdateDessert(newDessertDto));
+
+        verify(dessertRepository, never()).findById(any());
+        verify(dessertRepository, never()).save(any());
+        verify(cuisineOriginRepository, never()).findByDescription(newDessertDto.getCuisineOrigin());
+        assertEquals(ErrorMessage.ALL_FIELDS_MUST_BE_FILLED_FOR_NEW_ENTITY + newDessertDto,
+            itemNotValidException.getMessage());
     }
 
     @Test
@@ -241,5 +284,20 @@ class AdminServiceImplTest {
         verify(drinkRepository).findById(updatedDrinkDto.getId());
         verify(drinkRepository, never()).save(any());
         assertEquals(ErrorMessage.DRINK_NOT_FOUND + updatedDrinkDto.getId(), itemNotFoundException.getMessage());
+    }
+
+    @Test
+    void addOrUpdateDrinkAddNotValidDrinkTest() {
+        DrinkDto newDrinkDto = ModelUtils.getNewDrinkDto();
+        newDrinkDto.setName(null);
+
+        IllegalArgumentException illegalArgumentException = assertThrows(
+            IllegalArgumentException.class,
+            () -> adminService.addOrUpdateDrink(newDrinkDto));
+
+        verify(drinkRepository, never()).findById(any());
+        verify(drinkRepository, never()).save(any());
+        assertEquals(ErrorMessage.ALL_FIELDS_MUST_BE_FILLED_FOR_NEW_ENTITY + newDrinkDto,
+            illegalArgumentException.getMessage());
     }
 }

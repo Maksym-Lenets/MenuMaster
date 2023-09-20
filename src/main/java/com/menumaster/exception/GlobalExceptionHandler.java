@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
      * response body.
      *
      * <p>@param itemNotFoundException The {@link ItemNotFoundException} to be handled.
+     * 
      * @return A ResponseEntity with a status code of {@link HttpStatus#NOT_FOUND}
      *         and the error message.
      */
@@ -65,6 +66,26 @@ public class GlobalExceptionHandler {
         List<String> errors = ex.getBindingResult().getFieldErrors()
             .stream().map(fe -> fe.getField() + " - " + fe.getDefaultMessage()).collect(Collectors.toList());
         return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Exception handler method for handling {@link IllegalArgumentException}.
+     *
+     * <p>This method is responsible for handling the {@link IllegalArgumentException}
+     * when it occurs. It returns a ResponseEntity with a status code of
+     * {@link HttpStatus#NOT_ACCEPTABLE} and the error message from the exception as
+     * the response body.
+     *
+     * @param illegalArgumentException The {@link IllegalArgumentException} to be
+     *                                 handled.
+     * @return A ResponseEntity with a status code of
+     *         {@link HttpStatus#NOT_ACCEPTABLE} and the error message.
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public ResponseEntity<String> handleIllegalArgumentException(
+        IllegalArgumentException illegalArgumentException) {
+        return new ResponseEntity<>(illegalArgumentException.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     private Map<String, List<String>> getErrorsMap(List<String> errors) {

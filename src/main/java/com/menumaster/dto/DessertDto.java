@@ -13,5 +13,5 @@ public class DessertDto {
     private Long id;
     private String name;
     private Integer price;
-    private String cuisineDescription;
+    private String cuisineOrigin;
 }
